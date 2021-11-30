@@ -59,17 +59,12 @@ public class Window extends JFrame {
                 playground.incorrectInput();
             }
         });
-        Image imgAccept = null;
-        try {
-            imgAccept = ImageIO.read(Objects.requireNonNull(getClass().getResource(pathButtonAccept)));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        assert imgAccept != null;
-        buttonExecute.setIcon(new ImageIcon(imgAccept));
+        buttonExecute.setIcon(new ImageIcon(pathButtonAccept));
         buttonExecute.setLocation(140, 400);
         buttonExecute.setSize(110, 110);
-        buttonExecute.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
+        buttonExecute.setContentAreaFilled(false);
+        buttonExecute.setFocusable(false);
+        buttonExecute.setBorder(BorderFactory.createEmptyBorder());
         add(buttonExecute);
 
         JButton buttonDecline = new JButton();
@@ -77,17 +72,12 @@ public class Window extends JFrame {
             inputPrice.setText("");
             inputCount.setText("");
         });
-        Image imgDecline = null;
-        try {
-            imgDecline = ImageIO.read(Objects.requireNonNull(getClass().getResource(pathButtonDecline)));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        assert imgDecline != null;
-        buttonDecline.setIcon(new ImageIcon(imgDecline));
+        buttonDecline.setIcon(new ImageIcon(pathButtonDecline));
         buttonDecline.setLocation(700, 400);
         buttonDecline.setSize(110, 110);
-        buttonDecline.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
+        buttonDecline.setContentAreaFilled(false);
+        buttonDecline.setFocusable(false);
+        buttonDecline.setBorder(BorderFactory.createEmptyBorder());
         add(buttonDecline);
 
         JLabel outputPrice = new JLabel("");
