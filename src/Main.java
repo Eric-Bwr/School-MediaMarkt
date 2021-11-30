@@ -1,10 +1,9 @@
-public class Main {
+import java.awt.*;
 
-    private static final int width = 1000;
-    private static final int height = 700;
+public class Main {
 
     public static void main(String[] args) {
         Playground playground = new Playground();
-        new Window(playground, width, height);
+        EventQueue.invokeLater(() -> new Window(playground));
     }
 }

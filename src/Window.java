@@ -8,35 +8,31 @@ import java.util.Objects;
 
 //Written by Eric Boewer on 23.11.2021
 //Assets & Design by Maxi Kingphan on 23.11.2021
+//https://github.com/Eric-Bwr/School-MediaMarkt
 
 interface Callbacks {
+    void getOutputPrice(JLabel outputPrice);
     void execute(float price, int count);
+    void incorrectInput();
 }
 
 public class Window extends JFrame {
 
     private final String pathBackgroundPanel = "Assets\\Panel.png";
+    private final String pathButtonAccept = "Assets\\Accept.png";
+    private final String pathButtonDecline = "Assets\\Decline.png";
 
-    private final int width;
-    private final int height;
-
-    public Window(Playground playground, int width, int height) {
-        this.width = width;
-        this.height = height;
+    public Window(Playground playground) {
         setTitle("MediaMarkt");
-        setSize(width, height);
+        setSize(1000, 700);
         setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(null);
         setLocationRelativeTo(null);
 
-        JLabel background = new JLabel(new ImageIcon(pathBackgroundPanel));
-        background.setLocation(0, 0);
-        background.setSize(width, height);
-        add(background);
+        setContentPane(new JLabel(new ImageIcon(pathBackgroundPanel)));
 
-        JTextField inputPrice = new JTextField(5);
-        inputPrice.setLocation(177, 300);
+        JTextField inputPrice = new JTextField(1);
+        inputPrice.setLocation(170, 280);
         inputPrice.setSize(285, 40);
         inputPrice.setBackground(new Color(251, 11, 12));
         inputPrice.setForeground(Color.WHITE);
@@ -45,9 +41,9 @@ public class Window extends JFrame {
         inputPrice.setBorder(BorderFactory.createEmptyBorder());
         add(inputPrice);
 
-        JTextField inputCount = new JTextField(5);
-        inputCount.setLocation(625, 300);
-        inputCount.setSize(153, 40);
+        JTextField inputCount = new JTextField(1);
+        inputCount.setLocation(620, 280);
+        inputCount.setSize(152, 40);
         inputCount.setBackground(new Color(251, 11, 12));
         inputCount.setForeground(Color.WHITE);
         inputCount.setCaretColor(Color.WHITE);
@@ -56,49 +52,53 @@ public class Window extends JFrame {
         add(inputCount);
 
         JButton buttonExecute = new JButton();
-        buttonExecute.addActionListener(e -> playground.execute(Float.parseFloat(inputPrice.getText()), Integer.parseInt(inputCount.getText())));
+        buttonExecute.addActionListener(e -> {
+            try {
+                playground.execute(Float.parseFloat(inputPrice.getText()), Integer.parseInt(inputCount.getText()));
+            }catch (Exception d) {
+                playground.incorrectInput();
+            }
+        });
         Image imgAccept = null;
         try {
-            imgAccept = ImageIO.read(Objects.requireNonNull(getClass().getResource("Assets/Accept.png")));
+            imgAccept = ImageIO.read(Objects.requireNonNull(getClass().getResource(pathButtonAccept)));
         } catch (IOException e) {
             e.printStackTrace();
         }
         assert imgAccept != null;
         buttonExecute.setIcon(new ImageIcon(imgAccept));
-        buttonExecute.setLocation(295, 400);
-        buttonExecute.setSize(107, 106);
-        buttonExecute.setBorder(BorderFactory.createLineBorder(Color.WHITE, 3));
-        buttonExecute.setVisible(true);
+        buttonExecute.setLocation(140, 400);
+        buttonExecute.setSize(110, 110);
+        buttonExecute.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
         add(buttonExecute);
 
-        JButton buttonClear = new JButton();
-        buttonClear.addActionListener(e -> {
+        JButton buttonDecline = new JButton();
+        buttonDecline.addActionListener(e -> {
             inputPrice.setText("");
             inputCount.setText("");
         });
         Image imgDecline = null;
         try {
-            imgDecline = ImageIO.read(Objects.requireNonNull(getClass().getResource("Assets/Decline.png")));
+            imgDecline = ImageIO.read(Objects.requireNonNull(getClass().getResource(pathButtonDecline)));
         } catch (IOException e) {
             e.printStackTrace();
         }
         assert imgDecline != null;
-        buttonClear.setIcon(new ImageIcon(imgDecline));
-        buttonClear.setLocation(670, 400);
-        buttonClear.setSize(107, 106);
-        buttonClear.setBorder(BorderFactory.createLineBorder(Color.WHITE, 3));
-        add(buttonClear);
+        buttonDecline.setIcon(new ImageIcon(imgDecline));
+        buttonDecline.setLocation(700, 400);
+        buttonDecline.setSize(110, 110);
+        buttonDecline.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
+        add(buttonDecline);
 
-        //JLabel outputPrice = new JLabel("test");
-        //outputPrice.setText("test");
-        //outputPrice.setLocation(0, 0);
-        //outputPrice.setFont(new Font("arial", Font.PLAIN, 27));
-        //outputPrice.setSize(300, 80);
-        //frame.add(outputPrice, BorderLayout.CENTER);
-        validate();
-        revalidate();
-        repaint();
-        setVisible(true);
+        JLabel outputPrice = new JLabel("");
+        outputPrice.setLocation(350, 530);
+        outputPrice.setSize(250, 100);
+        outputPrice.setForeground(Color.WHITE);
+        outputPrice.setFont(new Font("arial", Font.PLAIN, 45));
+        add(outputPrice);
+        playground.getOutputPrice(outputPrice);
+
+        EventQueue.invokeLater(() -> setVisible(true));
 
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent windowEvent){
